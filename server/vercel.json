@@ -14,7 +14,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "server/sever.js"
+            "dest": "server.js"
         }
     ]
 }
