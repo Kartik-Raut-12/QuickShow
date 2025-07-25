@@ -3,8 +3,7 @@ import {Inngest} from "inngest";
 
 //Create a client to send and recieve events
 export const inngest = new Inngest({ 
-    id: "movie-ticket-booking",
-    signingKey: process.env.INGEST_SIGNING_KEY
+    id: "movie-ticket-booking"
  });
 
 // Inngest Function to save user data to a database
