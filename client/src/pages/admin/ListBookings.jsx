@@ -3,26 +3,41 @@ import { dummyBookingData } from "../../assets/assets";
 import Loading from "../../components/Loading";
 import Title from "../../components/admin/Title";
 import { dateFormat } from "../../lib/dateFormat";
+import { useAppContext } from "../../context/AppContext";
 
 const ListBookings = () => {
 
-    const currency = import.meta.env.VITE_CURRENCY
-  
-    const [bookings, setBookings] = useState([]);
-    const [isloading, setIsLoading] = useState(true);
+  const currency = import.meta.env.VITE_CURRENCY
 
-    const getAllBookings = async () =>{
-      setBookings(dummyBookingData)
-      setIsLoading(false);
-    };
+  const { axios, getToken, user } = useAppContext()
 
-    useEffect(() => {
+  const [bookings, setBookings] = useState([]);
+  const [isloading, setIsLoading] = useState(true);
+
+  const getAllBookings = async () => {
+    try {
+      const { data } = await axios.get('/api/admin/all-bookings',
+        {
+          headers: { Authorization: `Bearer ${await getToken()}` }
+        })
+      setBookings(data.bookings)
+
+
+    } catch (error) {
+      console.error(error)
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (user) {
       getAllBookings()
-    }, [])
+    }
+  }, [user]);
 
   return !isloading ? (
     <>
-      <Title text1="List " text2="Bookings"/>
+      <Title text1="List " text2="Bookings" />
 
       <div className="max-w-4xl mt-6 overflow-x-auto">
         <table className="w-full border-collapse rounded-md overflow-hidden text-nowrap">
@@ -49,7 +64,7 @@ const ListBookings = () => {
         </table>
       </div>
     </>
-  ) : <Loading/>
+  ) : <Loading />
 
 }
 
