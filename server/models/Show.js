@@ -18,8 +18,7 @@ const showSchema = new mongoose.Schema(
         occupiedSeats: {
             type: Object,
             default:{}
-        },
-
+        }
     },
     {
         minimize: false

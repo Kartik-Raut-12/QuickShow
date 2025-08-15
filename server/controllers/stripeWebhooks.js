@@ -3,14 +3,18 @@ import Booking from '../models/Booking.js'
 
 export const stripeWebhooks = async (req, res) => {
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
-    const sig = request.headers["stripe-signature"];
+    const sig = req.headers["stripe-signature"];
 
     let event;
 
     try {
-        event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET)
-    } catch(error){
-        return Response.status(400).send(`Webhook Error: ${error.message}`)
+        event = stripeInstance.webhooks.constructEvent(
+            req.body,
+            sig,
+            process.env.STRIPE_WEBHOOK_SECRET
+        );
+    } catch (error) {
+        return res.status(400).send(`Webhook Error: ${error.message}`)
     }
 
     try {
@@ -31,15 +35,36 @@ export const stripeWebhooks = async (req, res) => {
 
                 break;
             }
-                
+
             default:
                console.log('Unhandled event type:', event.type)
         }
         res.json({
             received: true
         })
-    } catch (error) {
-        console.error("Webhook processing error:", err);
-        Response.status(500).send("Internal Server Error");
+    } 
+    // try {
+    //     switch (event.type) {
+    //         case "checkout.session.completed": {
+    //             const session = event.data.object; // ✅ This is already the checkout session
+    //             const { bookingId } = session.metadata; // ✅ Metadata is directly here
+
+    //             await Booking.findByIdAndUpdate(bookingId, {
+    //                 isPaid: true,
+    //                 paymentLink: ""
+    //             });
+
+    //             break;
+    //         }
+
+    //         default:
+    //             console.log('Unhandled event type:', event.type);
+    //     }
+
+    //     res.json({ received: true });
+    // } 
+    catch (error) {
+        console.error("Webhook processing error:", error);
+        res.status(500).send("Internal Server Error");
     }
 }

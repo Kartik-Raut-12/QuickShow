@@ -29,7 +29,6 @@ app.use(clerkMiddleware())
 
 
 //MOUNTING
-//API Routes
 app.get('/', (req, res)=> res.send('Solu is Live!'))
 app.use('/api/inngest', serve({ client: inngest, functions }))
 app.use('/api/show', showRouter)

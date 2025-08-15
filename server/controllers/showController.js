@@ -1,22 +1,61 @@
+// import axios from 'axios';
+// import Movie from '../models/Movie.js';
+// import Show from '../models/Show.js';
+// const dns = require("dns");
+
+// dns.setDefaultResultOrder('ipv4first');
+
+// //API to get now playing movies from TMDB API
+// export const getNowPlayingMovies = async (req, res) => {
+//     try {
+//         const { data } = await axios.get('https://api.themoviedb.org/3/movie/now_playing', {
+//             headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },
+//             timeout: 10000
+
+//         })
+
+//         const movies = data.results;
+
+//         res.json({
+//             success: true,
+//             movies: movies
+//         })
+
+//     } catch (error) {
+//         console.error("Axios Error Stack:", error);
+//         res.json({
+//             success: false,
+//             message: error?.message || "Something went wrong"
+//         });
+//     }
+
+// }
+
 import axios from 'axios';
 import Movie from '../models/Movie.js';
 import Show from '../models/Show.js';
+import dns from 'dns'; // use ES import if using "type": "module"
 
-//API to get now playing movies from TMDB API
+// API to get now playing movies from TMDB API
 export const getNowPlayingMovies = async (req, res) => {
     try {
-        const { data } = await axios.get('https://api.themoviedb.org/3/movie/now_playing', {
-            headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },
-            timeout: 15000
+        // Force IPv4 resolution only for this request
+        dns.setDefaultResultOrder('ipv4first');
 
-        })
+        const { data } = await axios.get(
+            'https://api.themoviedb.org/3/movie/now_playing',
+            {
+                headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },
+                timeout: 10000
+            }
+        );
 
         const movies = data.results;
 
         res.json({
             success: true,
-            movies: movies
-        })
+            movies
+        });
 
     } catch (error) {
         console.error("Axios Error Stack:", error);
@@ -25,8 +64,8 @@ export const getNowPlayingMovies = async (req, res) => {
             message: error?.message || "Something went wrong"
         });
     }
+};
 
-}
 
 
 //API to add a new show to the database
