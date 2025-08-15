@@ -83,7 +83,7 @@ const releaseSeatsAndDeleteBooking = inngest.createFunction(
 const sendBookingConfirmationEmail = inngest.createFunction(
     { id: "send-booking-confirmation-email" },
     { event: "app/show.booked" },
-    async ({ eent, step }) => {
+    async ({ event, step }) => {
         const { bookingId } = event.data;
 
         const booking = await Booking.findById(bookingId).populate({
@@ -98,7 +98,7 @@ const sendBookingConfirmationEmail = inngest.createFunction(
             // <h2> ${booking.user.name},</h2>
             //        </div>`
             subject: `Payment Confirmation: "${booking.show.movie.title}" booked!`,
-            body: `<div style="font-family: Arial, sans-serif; line-height: 1.5;">
+            body: `<div style="font-family: Arial, sans-serif;line-height: 1.5;">
                    <h2>Hi ${booking.user.name},</h2>
                    <p>Your booking for <strong style="color: #F84565;">"${booking.show.movie.title}"</strong> is confirmed.</p>
                    <p>
