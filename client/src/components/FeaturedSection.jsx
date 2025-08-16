@@ -29,8 +29,8 @@ const FeaturedSection = () => {
                 ))
                 } */}
                    {
-                shows.slice(0, 4).map((show, index)=>(
-                    <MovieCard  movie={show} key={index}/>
+                shows.slice(0, 4).map((show)=>(
+                    <MovieCard  movie={show} key={show.id}/>
                 ))
                 }
             </div>
