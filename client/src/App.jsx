@@ -55,15 +55,14 @@ const App = () => {
           path='/loading/:nextUrl'
           element={<Loading />}
         />
-
-
         <Route
           path='/favourite'
           element={<Favourite />}
         />
 
 
-        <Route path='/admin/*' element={user ? <Layout /> : (
+        <Route path='/admin/*' 
+               element={user ? <Layout /> : (
           <div className='min-h-screen flex justify-center items-center'>
             <SignIn fallbackRedirectUrl={'/admin'} />
           </div>
